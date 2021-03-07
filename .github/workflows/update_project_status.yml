@@ -1,0 +1,27 @@
+name: Update Project Status
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  push:
+  schedule:
+    - cron: '0 8-15 * * *'
+
+jobs:
+  update-project-status:
+    name: Update Project Status
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install requirements
+        run: pip install labelbox pandas matplotlib
+      - name: Run update project status
+        run: python "src/Update Project Status.py"
+        env:
+          LABELBOX_API_KEY: ${{ secrets.LABELBOX_API_KEY }}
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
