@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install requirements
-        run: pip install labelbox pandas matplotlib
+        run: pip install labelbox pandas matplotlib pytz
       - name: Run update project status
         run: python "src/Update Project Status.py"
         env:
