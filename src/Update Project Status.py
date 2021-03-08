@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install --quiet --upgrade labelbox
+# MAGIC %pip install --quiet --upgrade labelbox pytz
 
 # COMMAND ----------
 
@@ -42,10 +42,12 @@ import matplotlib
 import matplotlib.cm 
 import matplotlib.pyplot
 from datetime import datetime
+import pytz
 
 color_mapping = dict(zip(sorted(project_df.index), matplotlib.cm.tab10(range(len(project_df)))))
 
-ax = project_df.sort_values('count')['count'].plot(kind='barh', xlabel='', color=[color_mapping[x] for x in project_df.index])
+ax = project_df.sort_values('count')['count'].plot(kind='barh', color=[color_mapping[x] for x in project_df.index], figsize=(8, 3))
+ax.set_ylabel('')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.spines['left'].set_visible(False)
@@ -57,7 +59,7 @@ for p in ax.patches:
     ax.annotate(str(p.get_width()), (p.get_x() + p.get_width(), p.get_y() + p.get_height()/2), xytext=(-2, 0), ha='right', va='center', textcoords='offset points', color='w')
     
 ax.set_title('Aantal geannotateerde items')
-ax.set_xlabel('Laatst bijgewerkt: ' + datetime.now().strftime('%d-%m-%y %H:%M'))
+ax.set_xlabel('Laatst bijgewerkt: ' + datetime.now(pytz.timezone('Europe/Amsterdam')).strftime('%d-%m-%y %H:%M'))
 
 root = '/dbfs/FileStore/dodijk/' if 'dbutils' in globals() else ''
 matplotlib.pyplot.savefig(root + 'status.svg', bbox_inches='tight')
